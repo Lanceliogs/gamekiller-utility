@@ -53,6 +53,28 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
             return 0;
         }
+        case GK_WM_TRAYICON:
+        {
+            UINT event = (UINT)lParam;
+            if (event == WM_RBUTTONUP)
+            {
+                gk_tray_show_menu(s_hwnd);
+            }
+            return 0;
+        }
+        case WM_COMMAND:
+        {
+            switch (LOWORD(wParam))
+            {
+                case GK_IDM_VERSION:
+                    break;
+                case GK_IDM_EXIT:
+                    gk_log_info("Quit from context menu requested");
+                    PostQuitMessage(0);
+                    break;
+            }
+            return 0;
+        }
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
@@ -117,6 +139,8 @@ int gk_app_init(void)
         return -1;
     if (!hotkey_register(s_hwnd))
         return -2;
+    if (!gk_tray_init(s_hwnd))
+        return -3;
     return 0;
 }
 
@@ -133,7 +157,7 @@ int gk_app_run(void)
 
 void gk_app_free(void)
 {
+    gk_tray_free();
     hotkey_unregister(s_hwnd);
     s_destroy_virtual_window();
 }
-
