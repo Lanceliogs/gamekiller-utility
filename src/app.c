@@ -31,7 +31,7 @@ static void s_close_foreground_proc(void)
     gk_log_info("The window (PID=%ld) was not gracefully closed. Using lethal force now.", pid);
     if (gk_proc_terminate_process(pid))
     {
-        gk_log_info("Kill confirmed (PID=%ld)\n", pid);
+        gk_log_info("Kill confirmed (PID=%ld)", pid);
         return;
     }
 
@@ -45,10 +45,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg) {
         case WM_HOTKEY: {
             int hotkeyId = (int)wParam;
-            gk_log_debug("Hotkey pressed! ID: %d\n", hotkeyId);
+            gk_log_debug("Hotkey pressed! ID: %d", hotkeyId);
             
             if (hotkeyId == 1) {
-                gk_log_info("[Ctrl+Alt+F12] Kill order received. Trying to close the foreground process...\n");
+                gk_log_info("<Ctrl+Alt+F12> Initiating kill sequence...");
                 s_close_foreground_proc();
             }
             return 0;
