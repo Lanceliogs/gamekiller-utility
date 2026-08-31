@@ -3,7 +3,7 @@
 #define PROC_POLL_INTERVAL_MS 50
 #define PROC_GRACEFUL_CLOSE_TIMEOUT_MS 1500
 
-DWORD proc_get_pid()
+DWORD proc_get_pid(void)
 {
     return GetCurrentProcessId();
 }

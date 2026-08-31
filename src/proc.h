@@ -1,11 +1,10 @@
 #ifndef GAMEKILLER_PROC_H
 #define GAMEKILLER_PROC_H
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 /* PID and HWND stuff */
-DWORD proc_get_pid();
+DWORD proc_get_pid(void);
 DWORD proc_get_foreground_pid(HWND *out_hwnd);
 
 /* Basic process exists utility */

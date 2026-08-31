@@ -11,13 +11,13 @@ int main(int argc, char* argv[])
     printf("GameKiller.exe\n");
     printf("-\n");
     printf("A hotkey-triggered bullet to snipe frozen fullscreen games\n");
-    printf("\n\n");
-    DWORD self_pid = proc_get_pid();
-    printf("SELF PID: %ld\n", self_pid);
+    printf("Ctrl+Alt+F12 will send a kill order to the current foreground application.\n");
+    printf("It is like Alt+F4, but stronger!\n");
 
-    HWND h;
-    DWORD fg_pid = proc_get_foreground_pid(&h);
-    printf("FOREGROUND PID: %ld\n", fg_pid);
-
-    return 0;
+    int rc = app_init();
+    if (rc != 0)
+        return rc;
+    rc = app_run();
+    app_free();
+    return rc;
 }

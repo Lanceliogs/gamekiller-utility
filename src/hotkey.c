@@ -6,17 +6,10 @@
 
 BOOL hotkey_register(HWND hwnd)
 {
-    (void)hwnd;
-    return TRUE;
+    return RegisterHotKey(hwnd, HOTKEY_ID, HOTKEY_MODS, HOTKEY_VK);
 }
 
 void hotkey_unregister(HWND hwnd)
 {
-    (void)hwnd;
-}
-
-int hotkey_poll(HWND hwnd)
-{
-    (void)hwnd;
-    return 0;
+    UnregisterHotKey(hwnd, HOTKEY_ID);
 }
