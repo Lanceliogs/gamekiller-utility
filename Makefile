@@ -23,14 +23,14 @@ $(TARGET): $(OBJECTS) $(RESOURCE)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	@if not exist "$(BUILD_DIR)" mkdir "$(BUILD_DIR)"
+	mkdir -p "$(BUILD_DIR)"
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(RESOURCE): $(RES_DIR)/resource.rc $(RES_DIR)/gamekiller.ico
-	@if not exist "$(BUILD_DIR)" mkdir "$(BUILD_DIR)"
+	mkdir -p "$(BUILD_DIR)"
 	$(WINDRES) $< -O coff -o $@
 
 clean:
-	del /Q "$(BUILD_DIR)\*.o" "$(TARGET)" 2>NUL || exit 0
+	rm -rf $(BUILD_DIR)/*.o $(TARGET)
 
 .PHONY: all clean
