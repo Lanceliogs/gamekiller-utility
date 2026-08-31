@@ -3,12 +3,12 @@
 #define PROC_POLL_INTERVAL_MS 50
 #define PROC_GRACEFUL_CLOSE_TIMEOUT_MS 1500
 
-DWORD proc_get_pid(void)
+DWORD gk_proc_get_pid(void)
 {
     return GetCurrentProcessId();
 }
 
-DWORD proc_get_foreground_pid(HWND *out_hwnd)
+DWORD gk_proc_get_foreground_pid(HWND *out_hwnd)
 {
     HWND hwnd;
     DWORD pid = 0;
@@ -21,7 +21,7 @@ DWORD proc_get_foreground_pid(HWND *out_hwnd)
     return pid;
 }
 
-BOOL proc_exists(HANDLE process)
+BOOL gk_proc_exists(HANDLE process)
 {
     DWORD exit_code;
     if (!GetExitCodeProcess(process, &exit_code))
@@ -29,7 +29,7 @@ BOOL proc_exists(HANDLE process)
     return exit_code == STILL_ACTIVE;
 }
 
-int proc_gracefully_close(HWND h, DWORD pid)
+int gk_proc_gracefully_close(HWND h, DWORD pid)
 {
     BOOL success = PostMessage(h, WM_CLOSE, 0, 0);
     if (!success)
@@ -40,7 +40,7 @@ int proc_gracefully_close(HWND h, DWORD pid)
     int rc = -2;
     while (elapsed < PROC_GRACEFUL_CLOSE_TIMEOUT_MS)
     {
-        if (!proc_exists(hdl))
+        if (!gk_proc_exists(hdl))
         {
             rc = 0;
             break;
@@ -52,7 +52,7 @@ int proc_gracefully_close(HWND h, DWORD pid)
     return rc;
 }
 
-int proc_terminate_process(int pid)
+int gk_proc_terminate_process(int pid)
 {
     HANDLE h = OpenProcess(SYNCHRONIZE | PROCESS_TERMINATE | PROCESS_QUERY_LIMITED_INFORMATION, 0, pid);
     BOOL success = TerminateProcess(h, 0);

@@ -3,8 +3,8 @@
 
 #include <windows.h>
 
-BOOL tray_init(HWND hwnd, HINSTANCE instance);
-void tray_remove(void);
-void tray_show_menu(HWND hwnd);
+BOOL gk_tray_init(HWND hwnd, HINSTANCE instance);
+void gk_tray_remove(void);
+void gk_tray_show_menu(HWND hwnd);
 
 #endif

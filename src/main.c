@@ -14,10 +14,10 @@ int main(int argc, char* argv[])
     printf("Ctrl+Alt+F12 will send a kill order to the current foreground application.\n");
     printf("It is like Alt+F4, but stronger!\n");
 
-    int rc = app_init();
+    int rc = gk_app_init();
     if (rc != 0)
         return rc;
-    rc = app_run();
-    app_free();
+    rc = gk_app_run();
+    gk_app_free();
     return rc;
 }

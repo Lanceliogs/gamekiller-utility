@@ -4,14 +4,14 @@
 #include <windows.h>
 
 /* PID and HWND stuff */
-DWORD proc_get_pid(void);
-DWORD proc_get_foreground_pid(HWND *out_hwnd);
+DWORD gk_proc_get_pid(void);
+DWORD gk_proc_get_foreground_pid(HWND *out_hwnd);
 
 /* Basic process exists utility */
-BOOL proc_exists(HANDLE process);
+BOOL gk_proc_exists(HANDLE process);
 
 /* WM_CLOSE message and terminate */
-int proc_gracefully_close(HWND h, DWORD pid);
-int proc_terminate_process(int pid);
+int gk_proc_gracefully_close(HWND h, DWORD pid);
+int gk_proc_terminate_process(int pid);
 
 #endif

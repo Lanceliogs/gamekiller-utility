@@ -13,30 +13,30 @@ static void s_close_foreground_proc(void)
 {
     HWND hwnd;
 
-    DWORD self_pid = proc_get_pid();
-    DWORD pid = proc_get_foreground_pid(&hwnd);
+    DWORD self_pid = gk_proc_get_pid();
+    DWORD pid = gk_proc_get_foreground_pid(&hwnd);
 
     if (self_pid == pid)
     {
-        printf("The app should not kill itself. Aborted!\n");
+        gk_log_warn("The app should not kill itself. Aborted!");
         return;
     }
 
-    if (proc_gracefully_close(hwnd, pid) == 0)
+    if (gk_proc_gracefully_close(hwnd, pid) == 0)
     {
-        printf("The window (PID=%ld) was gracefully closed!\n", pid);
+        gk_log_info("The window (PID=%ld) was gracefully closed!", pid);
         return;
     }
     
-    printf("The window (PID=%ld) was not gracefully closed. Using lethal force now.", pid);
-    if (proc_terminate_process(pid))
+    gk_log_info("The window (PID=%ld) was not gracefully closed. Using lethal force now.", pid);
+    if (gk_proc_terminate_process(pid))
     {
-        printf("Kill confirmed (PID=%ld)\n", pid);
+        gk_log_info("Kill confirmed (PID=%ld)\n", pid);
         return;
     }
 
-    printf("The target window (PID=%ld) cannot be killed.", pid);
-    log_print_last_error();
+    gk_log_error("The target window (PID=%ld) cannot be killed.", pid);
+    gk_log_last_error();
 }
 
 // Window messages callback function
@@ -45,10 +45,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg) {
         case WM_HOTKEY: {
             int hotkeyId = (int)wParam;
-            printf("Hotkey pressed! ID: %d\n", hotkeyId);
+            gk_log_debug("Hotkey pressed! ID: %d\n", hotkeyId);
             
             if (hotkeyId == 1) {
-                printf("[Ctrl+Alt+F12] Kill order received. Trying to close the foreground process...\n");
+                gk_log_info("[Ctrl+Alt+F12] Kill order received. Trying to close the foreground process...\n");
                 s_close_foreground_proc();
             }
             return 0;
@@ -66,7 +66,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 static int s_create_virtual_window(void)
 {
     if (s_hwnd != NULL) {
-        printf("Window was already created");
+        gk_log_warn("Window was already created");
         return 1;
     }
 
@@ -79,7 +79,8 @@ static int s_create_virtual_window(void)
     wc.lpszClassName = CLASS_NAME;
 
     if (!RegisterClass(&wc)) {
-        printf("Failed to register window class.");
+        gk_log_error("Failed to register window class.");
+        gk_log_last_error();
         return 2;
     }
 
@@ -96,7 +97,8 @@ static int s_create_virtual_window(void)
     );
 
     if (s_hwnd == NULL) {
-        printf("Failed to create message-only window.");
+        gk_log_error("Failed to create message-only window.");
+        gk_log_last_error();
         return 3;
     }
 
@@ -109,7 +111,7 @@ void s_destroy_virtual_window(void)
     s_hwnd = NULL;
 }
 
-int app_init(void)
+int gk_app_init(void)
 {
     if (s_create_virtual_window() != 0)
         return -1;
@@ -118,7 +120,7 @@ int app_init(void)
     return 0;
 }
 
-int app_run(void)
+int gk_app_run(void)
 {
     MSG msg = {0};
     while (GetMessage(&msg, NULL, 0, 0))
@@ -129,7 +131,7 @@ int app_run(void)
     return 0;
 }
 
-void app_free(void)
+void gk_app_free(void)
 {
     hotkey_unregister(s_hwnd);
     s_destroy_virtual_window();

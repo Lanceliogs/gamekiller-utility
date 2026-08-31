@@ -1,6 +1,6 @@
 #include "tray.h"
 
-BOOL tray_init(HWND hwnd, HINSTANCE instance)
+BOOL gk_tray_init(HWND hwnd, HINSTANCE instance)
 {
     (void)hwnd;
     (void)instance;
@@ -8,12 +8,12 @@ BOOL tray_init(HWND hwnd, HINSTANCE instance)
     return TRUE;
 }
 
-void tray_remove(void)
+void gk_tray_remove(void)
 {
     
 }
 
-void tray_show_menu(HWND hwnd)
+void gk_tray_show_menu(HWND hwnd)
 {
     (void)hwnd;
 }
