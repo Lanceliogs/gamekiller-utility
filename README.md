@@ -5,7 +5,7 @@ because of sloppy code or sloppy PC or whatever.
 
 I decided to bring out the big guns.
 
-Issue I want to solve:
+### Issue I want to solve:
 - I have only one screen
 - I use fullscreen instead of windowed because it usually gives more performances
 - When a game freeze, reaching the Task Manager is sometimes impossible.
