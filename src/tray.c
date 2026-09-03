@@ -41,18 +41,9 @@ void gk_tray_show_menu(HWND hwnd)
 {
     (void)hwnd;
     HMENU menu = CreatePopupMenu();
-    AppendMenu(
-        menu,
-        MF_STRING,
-        GK_IDM_VERSION,
-        "GameKiller - v0.1"
-    );
-    AppendMenu(
-        menu,
-        MF_STRING,
-        GK_IDM_EXIT,
-        "Exit"
-    );
+    AppendMenu(menu, MF_STRING, GK_IDM_VERSION, "GameKiller - v0.1");
+    AppendMenu(menu, MF_STRING, GK_IDM_SETTINGS, "Settings...");
+    AppendMenu(menu, MF_STRING, GK_IDM_EXIT, "Exit");
 
     POINT point;
     GetCursorPos(&point);

@@ -8,7 +8,8 @@
 #define GK_WM_TRAYICON (WM_APP + 1)
 
 #define GK_IDM_VERSION 1
-#define GK_IDM_EXIT 2
+#define GK_IDM_SETTINGS 2
+#define GK_IDM_EXIT 3
 
 BOOL gk_tray_init(HWND hwnd);
 void gk_tray_free(void);

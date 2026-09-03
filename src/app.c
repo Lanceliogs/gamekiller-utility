@@ -15,7 +15,7 @@
 static HWND s_hwnd = NULL;
 
 // Settings instance
-static gk_app_setings_t s_settings;
+static gk_settings_t s_settings;
 
 static void s_close_foreground_proc(void)
 {
@@ -52,7 +52,7 @@ static void s_close_foreground_proc(void)
 }
 
 // Window messages callback function
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg) {
         case WM_HOTKEY: {
@@ -60,9 +60,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             gk_log_debug("Hotkey pressed! ID: %d", hotkeyId);
             
             if (hotkeyId == 1) {
-                gk_log_info("<Ctrl+Alt+F12> Initiating kill sequence...");
-                if (s_settings.enable_hotkey)
+                if (s_settings.enable_hotkey) {
+                    gk_log_info("<Ctrl+Alt+F12> Initiating kill sequence!");
                     s_close_foreground_proc();
+                }
+                else {
+                    gk_log_info("<Ctrl+Alt+F12> Disabled by settings...");
+                }
             }
             return 0;
         }
@@ -80,6 +84,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             switch (LOWORD(wParam))
             {
                 case GK_IDM_VERSION:
+                    break;
+                case GK_IDM_SETTINGS:
+                    gk_settings_show_dialog(s_hwnd, &s_settings);
                     break;
                 case GK_IDM_EXIT:
                     gk_log_info("Quit from context menu requested");
