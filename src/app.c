@@ -11,6 +11,29 @@
 #define sfx_success() if(s_settings.enable_sfx) gk_sfx_success()
 #define sfx_failure() if(s_settings.enable_sfx) gk_sfx_failure()
 
+// Global named mutex for single instance
+static HANDLE s_mutex = NULL;
+
+int s_acquire_mutex(void)
+{
+    s_mutex = CreateMutex(NULL, TRUE, "GameKiller_SingleInstance");
+    if (s_mutex == NULL)
+        return -1;
+
+    if (GetLastError() == ERROR_ALREADY_EXISTS)
+    {
+        CloseHandle(s_mutex);
+        s_mutex = NULL;
+        return -1;
+    }
+    return 0;
+}
+
+void s_release_mutex(void)
+{
+    ReleaseMutex(s_mutex);
+}
+
 // Virtual window handle so we can receive hotkey messages
 static HWND s_hwnd = NULL;
 
@@ -153,13 +176,20 @@ void s_destroy_virtual_window(void)
 
 int gk_app_init(void)
 {
-    gk_settings_init(&s_settings);
-    if (s_create_virtual_window() != 0)
+    if (s_acquire_mutex() != 0)
         return -1;
-    if (!hotkey_register(s_hwnd))
+
+    gk_settings_init(&s_settings);
+    
+    if (s_create_virtual_window() != 0)
         return -2;
-    if (!gk_tray_init(s_hwnd))
+
+    if (!hotkey_register(s_hwnd))
         return -3;
+
+    if (!gk_tray_init(s_hwnd))
+        return -4;
+
     return 0;
 }
 
@@ -179,4 +209,5 @@ void gk_app_free(void)
     gk_tray_free();
     hotkey_unregister(s_hwnd);
     s_destroy_virtual_window();
+    s_release_mutex();
 }

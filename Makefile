@@ -17,7 +17,7 @@ LDFLAGS_COMMON  := -static
 LDFLAGS_DEBUG   := $(LDFLAGS_COMMON)
 LDFLAGS_RELEASE := $(LDFLAGS_COMMON) -mwindows -s
 
-LDLIBS  := -lshell32 -luser32 -lwinmm -mwindows
+LDLIBS  := -lshell32 -luser32 -lwinmm
 
 SOURCES := $(wildcard $(SRC_DIR)/*.c)
 
@@ -48,6 +48,7 @@ $(DEBUG_TARGET): $(DEBUG_OBJECTS) $(DEBUG_RESOURCE)
 $(RELEASE_TARGET): $(RELEASE_OBJECTS) $(RELEASE_RESOURCE)
 	@mkdir -p "$(RELEASE_DIR)"
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	strip $(RELEASE_TARGET)
 
 $(DEBUG_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p "$(DEBUG_DIR)"
