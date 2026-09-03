@@ -3,11 +3,19 @@
 #include "hotkey.h"
 #include "tray.h"
 #include "log.h"
+#include "sfx.h"
+#include "settings.h"
 
 #include <stdio.h>
 
+#define sfx_success() if(s_settings.enable_sfx) gk_sfx_success()
+#define sfx_failure() if(s_settings.enable_sfx) gk_sfx_failure()
+
 // Virtual window handle so we can receive hotkey messages
 static HWND s_hwnd = NULL;
+
+// Settings instance
+static gk_app_setings_t s_settings;
 
 static void s_close_foreground_proc(void)
 {
@@ -19,12 +27,14 @@ static void s_close_foreground_proc(void)
     if (self_pid == pid)
     {
         gk_log_warn("The app should not kill itself. Aborted!");
+        sfx_failure();
         return;
     }
 
     if (gk_proc_gracefully_close(hwnd, pid) == 0)
     {
         gk_log_info("The window (PID=%ld) was gracefully closed!", pid);
+        sfx_success();
         return;
     }
     
@@ -32,11 +42,13 @@ static void s_close_foreground_proc(void)
     if (gk_proc_terminate_process(pid))
     {
         gk_log_info("Kill confirmed (PID=%ld)", pid);
+        sfx_success();
         return;
     }
 
     gk_log_error("The target window (PID=%ld) cannot be killed.", pid);
     gk_log_last_error();
+    sfx_failure();
 }
 
 // Window messages callback function
@@ -49,7 +61,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             
             if (hotkeyId == 1) {
                 gk_log_info("<Ctrl+Alt+F12> Initiating kill sequence...");
-                s_close_foreground_proc();
+                if (s_settings.enable_hotkey)
+                    s_close_foreground_proc();
             }
             return 0;
         }
@@ -135,6 +148,7 @@ void s_destroy_virtual_window(void)
 
 int gk_app_init(void)
 {
+    gk_settings_init(&s_settings);
     if (s_create_virtual_window() != 0)
         return -1;
     if (!hotkey_register(s_hwnd))

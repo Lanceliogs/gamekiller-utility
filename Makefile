@@ -10,7 +10,7 @@ BUILD_DIR := build
 CPPFLAGS := -DWIN32_LEAN_AND_MEAN
 CFLAGS   := -Wall -Wextra -O2 -std=c11
 LDFLAGS  := -static
-LDLIBS   := -lshell32 -luser32
+LDLIBS   := -lshell32 -luser32 -lwinmm
 
 SOURCES := $(wildcard $(SRC_DIR)/*.c)
 OBJECTS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SOURCES))
@@ -26,9 +26,9 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p "$(BUILD_DIR)"
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
-$(RESOURCE): $(RES_DIR)/resource.rc $(RES_DIR)/gamekiller.ico
+$(RESOURCE): $(RES_DIR)/resource.rc
 	mkdir -p "$(BUILD_DIR)"
-	$(WINDRES) $< -O coff -o $@
+	$(WINDRES) -Isrc $< -O coff -o $@
 
 clean:
 	rm -rf $(BUILD_DIR)/*.o $(TARGET)

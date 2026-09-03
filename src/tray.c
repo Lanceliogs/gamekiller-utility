@@ -1,3 +1,4 @@
+#include "resources.h"
 #include "tray.h"
 #include "log.h"
 
@@ -11,7 +12,7 @@ BOOL gk_tray_init(HWND hwnd)
 {
     HICON hicon = LoadIcon(
         GetModuleHandle(NULL),
-        MAKEINTRESOURCE(GK_IDI_APP_ICON)
+        MAKEINTRESOURCE(IDI_ICON_GK)
     );
 
     s_nid.cbSize = sizeof(s_nid);

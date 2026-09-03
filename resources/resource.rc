@@ -1,1 +1,23 @@
-101 ICON "gamekiller.ico"
+#include "resources.h"
+
+#include <windows.h>
+
+/* Icons */ 
+IDI_ICON_GK         ICON        "gamekiller.ico"
+
+
+/* Sound FX */
+IDR_SFX_SUCCESS     WAVE        "dsswtchn.wav"
+IDR_SFX_FAILURE     WAVE        "dsnoway.wav"
+
+
+/* Settings dialog */
+IDD_SETTINGS DIALOGEX 0, 0, 220, 90
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Settings"
+FONT 9, "Segoe UI"
+BEGIN
+    AUTOCHECKBOX    "Enable sound effects",             IDC_SOUND_FX,   10,  15, 190, 12
+    AUTOCHECKBOX    "Enable <Ctrl+Alt+F12> hotkey",     IDC_HOTKEY,     10,  35, 190, 12
+    DEFPUSHBUTTON   "Close",                            IDC_CLOSE,      105, 42,  50, 14
+END
