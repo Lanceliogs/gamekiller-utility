@@ -1,0 +1,1 @@
+#define GK_VERSION_STRING "GameKiller - v1.0"

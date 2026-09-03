@@ -1,6 +1,7 @@
 #include "resources.h"
 #include "tray.h"
 #include "log.h"
+#include "version.h"
 
 #include <shellapi.h>
 
@@ -41,7 +42,8 @@ void gk_tray_show_menu(HWND hwnd)
 {
     (void)hwnd;
     HMENU menu = CreatePopupMenu();
-    AppendMenu(menu, MF_STRING, GK_IDM_VERSION, "GameKiller - v0.1");
+    AppendMenu(menu, MF_STRING | MF_GRAYED, 0, GK_VERSION_STRING);
+    AppendMenu(menu, MF_SEPARATOR, 0, NULL);
     AppendMenu(menu, MF_STRING, GK_IDM_SETTINGS, "Settings...");
     AppendMenu(menu, MF_STRING, GK_IDM_EXIT, "Exit");
 

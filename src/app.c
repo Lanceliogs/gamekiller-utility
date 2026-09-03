@@ -83,8 +83,6 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         {
             switch (LOWORD(wParam))
             {
-                case GK_IDM_VERSION:
-                    break;
                 case GK_IDM_SETTINGS:
                     gk_settings_show_dialog(s_hwnd, &s_settings);
                     break;
