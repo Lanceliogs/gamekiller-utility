@@ -43,11 +43,11 @@ release: $(RELEASE_TARGET)
 
 $(DEBUG_TARGET): $(DEBUG_OBJECTS) $(DEBUG_RESOURCE)
 	@mkdir -p "$(DEBUG_DIR)"
-	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	$(CC) $(LDFLAGS_DEBUG) $^ $(LDLIBS) -o $@
 
 $(RELEASE_TARGET): $(RELEASE_OBJECTS) $(RELEASE_RESOURCE)
 	@mkdir -p "$(RELEASE_DIR)"
-	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	$(CC) $(LDFLAGS_RELEASE) $^ $(LDLIBS) -o $@
 	strip $(RELEASE_TARGET)
 
 $(DEBUG_DIR)/%.o: $(SRC_DIR)/%.c
